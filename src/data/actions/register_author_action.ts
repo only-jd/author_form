@@ -12,27 +12,34 @@ export async function Register_Author_Action(
         };
     }
 
-    const data = {
+    // Create FormData to handle both the author data and the image file
+    const data = new FormData();
+
+    // Add the form fields
+    data.append("data", JSON.stringify({
         full_name: formData.fullName,
         age: formData.age,
         gender: formData.gender,
-        contact_no: formData.contactDetails.toString(), // Convert to string if necessary
+        contact_no: formData.contactDetails,
         email: formData.email,
-        linked_url: formData.socialMediaLinks, // Array is now correct
+        linked_url: formData.socialMediaLinks,
         previous_work: formData.previousWork,
         prev_work_url: formData.previousWorkLink,
         bio: formData.bio,
         edu_qualification: formData.education,
         domain_type: formData.domain,
         other_domain: formData.otherDomain,
-        current_org: formData.currentOrganization,
-        profile_picture: formData.profilePicture // This will be handled differently
-    };
+        current_org: formData.currentOrganization
+    }));
 
-    console.log(data)
+    // Add the image file to the "profile_picture" field
+    if (formData.profilePicture) {
+        data.append("files.profile_picture", formData.profilePicture);
+    }
 
     try {
-        const response = await Register_Author_Service( data);
+        // Call the service with FormData
+        const response = await Register_Author_Service(data);
         return {
             success: true,
             data: response,
@@ -40,6 +47,10 @@ export async function Register_Author_Action(
         };
     } catch (error) {
         console.error("Register Author Action Error:", error);
-       
+        return {
+            success: false,
+            data: null,
+            error: "Failed to register author. Please try again later."
+        };
     }
 }

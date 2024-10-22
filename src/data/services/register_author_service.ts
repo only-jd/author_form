@@ -1,20 +1,23 @@
 import axios from "axios";
 
-
 const baseUrl = "http://localhost:1337"; // Base URL for your API
 
 export async function Register_Author_Service(
-    data:any
-): Promise<any> {
+    data: FormData
+) {
+    console.log("service check", data);
     try {
-      console.log("services",data)
         const response = await axios.post(
-            `${baseUrl}/api/author`, 
-            data, 
-            { headers: { 'Content-Type': 'multipart/form-data' } } // Ensure content type is set
+            `${baseUrl}/api/authors`, 
+            data,
+            { 
+                headers: { 
+                    'Content-Type': 'multipart/form-data'
+                } 
+            }
         );
-        
-        return response.data; // Return the response data
+        console.log("response", response.data);
+        return response.data;
     } catch (error) {
         console.error("Register Author Service Error:", error);
         throw new Error("Failed to register author. Please try again later.");

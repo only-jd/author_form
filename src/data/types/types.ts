@@ -1,6 +1,6 @@
 export interface AuthorTypes{
     fullName:string;
-    age:string;
+    age:number;
     gender:string;
     contactDetails:string;
     email:string;
